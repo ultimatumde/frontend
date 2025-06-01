@@ -1,0 +1,2 @@
+meson:
+    meson setup build
