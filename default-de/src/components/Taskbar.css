@@ -1,0 +1,17 @@
+.taskbar {
+  background-color: #212121da;
+  height: 6vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1vh;
+  color: #fff;
+}
+
+.taskbar img {
+  height: 6vh;
+}
+
+.taskbar p {
+  font-size: 4vh;
+}

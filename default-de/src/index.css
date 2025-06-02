@@ -1,0 +1,10 @@
+@font-face {
+  font-family: jetbrains;
+  src: url("https://new.nyabyte.dev/JetBrains.ttf");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: jetbrains;
+}
