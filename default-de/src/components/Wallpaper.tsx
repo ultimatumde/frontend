@@ -2,7 +2,11 @@ import "./wallpaper.css";
 import wallpaper from "../assets/wallpaper.jpg";
 
 const Wallpaper = () => {
-  return <img src={wallpaper} className="wallpaper" />;
+  return (
+    <div className="wallbg">
+      <img src={wallpaper} className="wallpaper" />
+    </div>
+  );
 };
 
 export default Wallpaper;

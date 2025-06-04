@@ -11,18 +11,36 @@
 
 .windowframe {
   margin: 5px;
-  background: rgba(255, 255, 255, 0.4);
   border-radius: 5px;
   display: flex;
   flex-direction: column;
   flex: 1;
+  backdrop-filter: blur(5px);
+  background: var(--window-bg);
+  transition-property: background-color, border-color;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+  padding: 10px;
 }
 
 .windowtitle {
   color: #fff;
-  background-color: #212121c5;
   padding: 5px;
   width: 100%;
+  transition: text-shadow 0.3s ease-in-out;
+}
+
+.windowtitle.focused {
+  text-shadow: 0 0 5px black;
+  border-radius: 5px;
+}
+
+.windowcontent {
+  flex: 1;
+  padding: 10px;
+  color: white;
+  border-radius: 5px;
+  background-color: var(--window-content-bg, transparent);
 }
 
 .windowframe canvas {

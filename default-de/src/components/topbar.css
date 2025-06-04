@@ -1,13 +1,14 @@
 .topbar {
   display: flex;
-  justify-content: space-between;
   backdrop-filter: blur(10px);
   background-color: rgba(255, 255, 255, 0.3);
-  padding: 12px;
+  padding: 0px 10px;
+  height: 50px;
   margin: 5px;
   border-radius: 5px;
   user-select: none;
   align-items: center;
+  justify-content: space-between;
 }
 
 .topbar p {
@@ -22,17 +23,32 @@
   display: flex;
 }
 
-.workspace {
+.workspacei {
   width: 25px;
   height: 25px;
   text-align: center;
   justify-content: center;
   align-items: center;
-  display: flex;
+  vertical-align: middle;
 }
 
-.workspace.active {
+.workspacei.active {
   color: white;
   background-color: #1e1e1e;
   border-radius: 5px;
+}
+
+.workspaces {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  margin-right: 10px;
+}
+
+.topbarleft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 10px;
 }

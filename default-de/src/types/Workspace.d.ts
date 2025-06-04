@@ -10,7 +10,6 @@ export interface WorkspaceLeaves {
 }
 
 export interface LWindow {
-  src: string;
   title: string;
   pid: number;
 }

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import "./topbar.css";
-import type { WorkspaceLeaves } from "../types/Workspace";
-import { workspacesStore, workspaceStore } from "../App";
+import { workspaceStore, workspacesStore } from "../stores/workspace";
+import { focusedPidStore } from "../stores/window";
+import type { LayoutType, WorkspaceLeaves } from "../types/Workspace";
+import { isGroup } from "../utils/wm";
 
 function generateDate(): Date {
   return new Date();
@@ -41,27 +43,44 @@ function padInt(i: number) {
   return i.toString().length < 2 ? "0" + i : i;
 }
 
+function getCurrentLayout(workspace: WorkspaceLeaves, focusedPid: number): LayoutType {
+  function findContainerWithPid(group: WorkspaceLeaves, pid: number): LayoutType | null {
+    for (const leaf of group.leaves) {
+      if (!isGroup(leaf) && leaf.pid === pid) {
+        return group.activeLayout;
+      } else if (isGroup(leaf)) {
+        if (containsWindow(leaf, pid)) {
+          return leaf.activeLayout;
+        }
+      }
+    }
+    return null;
+  }
+
+  function containsWindow(group: WorkspaceLeaves, pid: number): boolean {
+    for (const leaf of group.leaves) {
+      if (!isGroup(leaf) && leaf.pid === pid) {
+        return true;
+      } else if (isGroup(leaf) && containsWindow(leaf, pid)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  return findContainerWithPid(workspace, focusedPid) || "horizontal";
+}
+
 const TopBar = () => {
   const [time, setTime] = useState<Date>(generateDate());
   const [showSeconds, setShowSeconds] = useState(false);
 
-  const { workspace: workspaceRoot, setWorkspace } = workspaceStore();
-  const { workspaces: workspacesRoot } = workspacesStore();
+  const workspace = workspaceStore((state) => state.workspace);
+  const workspaces = workspacesStore((state) => state.workspaces);
+  const focusedPid = focusedPidStore((state) => state.focusedPid);
 
-  const [workspace] = useState<number>(workspaceRoot as number);
-
-  const [workspaces, setWorkspaces] = useState<typeof workspacesRoot>(
-    workspacesRoot as WorkspaceLeaves[]
-  );
-
-  workspaceStore.subscribe((state) => {
-    setWorkspace(state.workspace as number);
-  });
-
-  workspacesStore.subscribe((state) => {
-    setWorkspaces(state.workspaces as WorkspaceLeaves[]);
-  });
-
+  const currentWorkspace = workspaces[workspace];
+  const orientation = currentWorkspace ? getCurrentLayout(currentWorkspace, focusedPid) : "horizontal";
 
   useEffect(() => {
     const ii = setInterval(() => {
@@ -76,16 +95,17 @@ const TopBar = () => {
   return (
     <div className="topbar">
       <div>
-        <div>
+        <div className="workspaces">
+          [
           {workspaces.map((_, i) => (
             <div
               onClick={() => {
-                setWorkspace(i);
+                workspaceStore.setState({ workspace: i });
               }}
               style={{
                 margin: "0 5px",
               }}
-              className={`workspace ${
+              className={`workspacei ${
                 i === workspace ? "active" : ""
               }`}
               key={i}
@@ -93,6 +113,13 @@ const TopBar = () => {
               {i + 1}
             </div>
           ))}
+          ]
+        </div>
+        <div className="topbarleft">
+          <span className="logo">Ultimatum Desktop</span>
+          <span>
+            [{orientation === "horizontal" ? "H" : "V"}]
+          </span>
         </div>
         <div style={{ width: "20px" }}></div>
         <p>{Title()}</p>

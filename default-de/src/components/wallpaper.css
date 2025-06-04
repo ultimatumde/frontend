@@ -1,7 +1,12 @@
-.wallpaper {
+.wallbg {
   position: absolute;
-  min-height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   z-index: -1;
+  background-color: black;
+}
+
+.wallpaper {
   object-fit: cover;
+  border-radius: 10px;
 }

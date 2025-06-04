@@ -1,13 +1,10 @@
-import type { Dispatch, SetStateAction } from "react";
-import {
-  makeWindow,
-  focusedPidStore,
-  workspacesStore,
-  workspaceStore,
-} from "../App";
 import type { LWindow, WorkspaceLeaves } from "../types/Workspace";
 import "./launcher.css";
-import { isGroup } from "./WindowView";
+import { workspaceStore, workspacesStore } from "../stores/workspace";
+import { isGroup, makeWindow } from "../utils/wm";
+import { focusedPidStore } from "../stores/window";
+import { UMJS } from "../lib/umjs";
+import launcherIcon from "../assets/launch.png";
 
 function insertNextToPid(
   group: WorkspaceLeaves,
@@ -28,27 +25,87 @@ function insertNextToPid(
   return false;
 }
 
+function insertWindowInWorkspace(
+  workspace: WorkspaceLeaves,
+  focusedPid: number,
+  newWindow: LWindow
+): void {
+  if (focusedPid === 0 || workspace.leaves.length === 0) {
+    workspace.leaves.push(newWindow);
+  } else {
+    if (!insertNextToPid(workspace, focusedPid, newWindow)) {
+      workspace.leaves.push(newWindow);
+    }
+  }
+}
+
+export type AppletType = "launcher" | "appLaunch" | "custom";
+
+function Applet({
+  type,
+  func,
+  customIcon,
+}: {
+  type: AppletType;
+  func?: () => void;
+  customIcon?: string;
+}) {
+  switch (type) {
+    case "launcher":
+      return (
+        <button
+          onClick={async () => {
+            await UMJS.execProcess("rofi -show drun", {
+              compositorArgs: {
+                directRender: true,
+              },
+            });
+          }}
+        >
+          <img src={launcherIcon} alt="Launcher Icon" />
+        </button>
+      );
+    case "appLaunch":
+      return (
+        <button
+          onClick={() => {
+            const w = makeWindow();
+            const currentWorkspaceIndex = workspaceStore.getState().workspace;
+            const updatedWorkspaces = [...workspacesStore.getState().workspaces];
+            const focusedPid = focusedPidStore.getState().focusedPid;
+
+            if (!updatedWorkspaces[currentWorkspaceIndex]) {
+              updatedWorkspaces[currentWorkspaceIndex] = {
+                leaves: [],
+                activeLayout: "horizontal",
+              };
+            }
+
+            insertWindowInWorkspace(updatedWorkspaces[currentWorkspaceIndex], focusedPid, w);
+
+            workspacesStore.setState({ workspaces: updatedWorkspaces });
+            focusedPidStore.setState({ focusedPid: w.pid });
+          }}
+        >
+          <img src="https://picsum.photos/200/200" alt="Launch App" />
+        </button>
+      );
+    case "custom":
+      return (
+        <button onClick={func}>
+          <img src={customIcon} alt="Custom Action" />
+        </button>
+      );
+    default:
+      return null;
+  }
+}
+
 export const Launcher = () => {
-  const { setFocusedPid } = focusedPidStore();
-  const { workspace, setWorkspace } = workspaceStore();
   return (
     <div className="launcher">
-      <button
-        onClick={() => {
-          const w = makeWindow();
-          insertNextToPid(
-            workspacesStore.getState().workspaces[
-              workspaceStore.getState().workspace
-            ],
-            focusedPidStore.getState().focusedPid,
-            w
-          );
-          setFocusedPid(w.pid);
-          setWorkspace(workspace);
-        }}
-      >
-        APP
-      </button>
+      <Applet type="launcher" />
+      <Applet type="appLaunch" />
     </div>
   );
 };

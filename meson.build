@@ -10,10 +10,8 @@ dependencies = [
 ]
 
 exe = executable(
-  'frontend',
-  'frontend.cpp',
-  install : true,
+  'backend',
+  'src/main.cpp',
+  include_directories : include_directories('./src'),
   dependencies : dependencies,
 )
-
-test('basic', exe)
