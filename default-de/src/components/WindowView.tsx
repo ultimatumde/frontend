@@ -72,6 +72,7 @@ const Window = ({ src, i }: { src: LWindow; i: number }) => {
       <div className={"windowcontent"}>
         <em>Mock data:</em>
         <p>{src.title} ({src.pid})</p>
+        <span>In a real implementation, this container would be an OpenGL canvas that renders the window's content as passed to it by the window-assigned DMABUF buffers.</span>
       </div>
     </div>
   );

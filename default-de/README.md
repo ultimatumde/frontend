@@ -7,3 +7,5 @@ Essentially a mock desktop environment so we can see what stuff should look like
 - Window management
 - Basic launcher
 - TBD (to be done) - Notification "daemon" (notifications sent over IPC)
+
+![Mock Implementation](demo.png)
