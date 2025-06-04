@@ -7,4 +7,14 @@
   margin: 0;
   padding: 0;
   font-family: jetbrains;
+  overflow: hidden;
+}
+
+html,
+body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  max-height: 100%;
+  width: 100%;
 }

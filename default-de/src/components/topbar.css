@@ -1,0 +1,38 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.3);
+  padding: 12px;
+  margin: 5px;
+  border-radius: 5px;
+  user-select: none;
+  align-items: center;
+}
+
+.topbar p {
+  display: flex;
+}
+
+.time {
+  cursor: pointer;
+}
+
+.topbar div {
+  display: flex;
+}
+
+.workspace {
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.workspace.active {
+  color: white;
+  background-color: #1e1e1e;
+  border-radius: 5px;
+}

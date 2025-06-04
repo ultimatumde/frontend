@@ -1,0 +1,30 @@
+.windowlayout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
+
+.windowlayout.horizontal {
+  flex-direction: row;
+}
+
+.windowframe {
+  margin: 5px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.windowtitle {
+  color: #fff;
+  background-color: #212121c5;
+  padding: 5px;
+  width: 100%;
+}
+
+.windowframe canvas {
+  flex: 1;
+}
